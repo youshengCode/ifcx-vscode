@@ -1,0 +1,54 @@
+{
+  "name": "ifcx-vscode",
+  "displayName": "IFCX Syntax Support",
+  "description": "Syntax highlighting and language support for IFCX files",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Programming Languages"
+  ],
+  "contributes": {
+    "languages": [
+      {
+        "id": "ifcx",
+        "aliases": [
+          "IFCX",
+          "ifcx"
+        ],
+        "extensions": [
+          ".ifcx"
+        ],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "ifcx",
+        "scopeName": "source.ifcx",
+        "path": "./syntaxes/ifcx.tmLanguage.json"
+      }
+    ]
+  },
+  "main": "./out/extension.js",
+  "scripts": {
+    "vscode:prepublish": "pnpm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "lint": "eslint \"src/**/*.ts\" --fix",
+    "format": "prettier --write \"src/**/*.{ts,json,md}\"",
+    "format:check": "prettier --check \"src/**/*.{ts,json,md}\"",
+    "check": "pnpm run format:check && pnpm run lint",
+    "build": "pnpm run check && pnpm run compile",
+    "dev": "pnpm run watch"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.85.0",
+    "@typescript-eslint/eslint-plugin": "^6.15.0",
+    "@typescript-eslint/parser": "^6.15.0",
+    "eslint": "^8.56.0",
+    "prettier": "^3.2.0",
+    "typescript": "^5.3.3"
+  }
+}

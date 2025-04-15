@@ -1,0 +1,29 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# IFCX VS Code Extension
+
+## Overview
+This VS Code extension provides enhanced support for `.ifcx` files, which are JSON-based files. The extension aims to improve the development experience by offering syntax highlighting, hover tooltips, and helper functions for better navigation and understanding of IFCX files.
+
+## Key Features
+1. **Syntax Highlighting**
+   - Using all exsiting json syntax highlight as basis
+   - Custom syntax highlighting for `.ifcx` file (ex: header, schemas)
+
+2. **Intelligent Hover Tooltips**
+   - Context-aware tooltips showing attributes descriptions based on schemas field
+   - Quick jump for children or inherits reference to the data block with the same name.
+   - Quick navigation between related sections
+
+3. **File Association**
+   - Add settings config of `.ifcx` file extension
+
+```json
+"files.associations": {
+  "*.ifcx": "json"
+}
+```
+

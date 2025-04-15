@@ -1,0 +1,21 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+## Preferences
+- Use kebab-case for file names.
+- Using pnpm over npm.
+- Using eslint for lint and format.
+
+## Technical Implementation
+- Built using TypeScript for type safety and better maintainability
+- Leverages VS Code's Extension API
+- Uses JSON Schema for validation and IntelliSense
+- Implements Language Server Protocol (LSP) for advanced features
+
+## Development Setup
+- Node.js environment
+- VS Code Extension Development tools
+- TypeScript configuration
+- Testing framework for extension features
