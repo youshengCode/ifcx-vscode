@@ -14,13 +14,13 @@
       "match": "\"([^\"':]*(?:(:)[^\"':]*)*)([:])(?=\\s*\\{)",
       "captures": {
         "1": {
-          "name": "entity.name.type.ifcx"
+          "name": "meta.schema.name.ifcx"
         },
         "2": {
-          "name": "keyword.operator.namespace.ifcx"
+          "name": "meta.schema.namespace.ifcx"
         },
         "3": {
-          "name": "keyword.operator.separator.ifcx"
+          "name": "meta.schema.separator.ifcx"
         }
       }
     }
@@ -81,13 +81,13 @@
               "name": "punctuation.definition.string.begin.json"
             },
             "2": {
-              "name": "entity.name.type.json"
+              "name": "meta.schema.name.ifcx"
             },
             "3": {
-              "name": "punctuation.separator.namespace.json"
+              "name": "meta.schema.namespace.ifcx"
             },
             "4": {
-              "name": "punctuation.separator.dictionary.key-value.json"
+              "name": "meta.schema.separator.ifcx"
             }
           }
         },
