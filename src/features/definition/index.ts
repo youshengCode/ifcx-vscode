@@ -6,6 +6,7 @@ interface SchemaDefinition {
   name: string;
   range: vscode.Range;
   document: vscode.TextDocument;
+  value?: string; // Add value property to store schema value
 }
 
 // Global cache for schema definitions
@@ -51,6 +52,88 @@ export function activateDefinitionProvider(context: vscode.ExtensionContext) {
     }
   );
 
+  // Register hover provider
+  const hoverProvider = vscode.languages.registerHoverProvider(
+    { scheme: 'file', language: 'ifcx' },
+    {
+      provideHover(document, position) {
+        // Use a custom regex to match attribute names with colons
+        const range = document.getWordRangeAtPosition(position, /[a-zA-Z0-9_:]+/);
+        if (!range) return null;
+
+        const word = document.getText(range);
+        const text = document.getText();
+
+        // Check if we're in the schemas section
+        const isInSchemasSection = isPositionInSchemasSection(document, position);
+
+        if (isInSchemasSection) {
+          // We're hovering over a schema name in the schemas section
+          const schemaKey = `${document.uri.toString()}:${word}`;
+          const schemaDefinition = schemaDefinitions.get(schemaKey);
+          if (schemaDefinition) {
+            return new vscode.Hover(
+              new vscode.MarkdownString(
+                `**Schema: ${schemaDefinition.name}**\n\nPress F12 to go to definition.`
+              )
+            );
+          }
+        } else {
+          // We're hovering over an attribute in the data section
+          // Check if it's a schema name
+          const schemaKey = `${document.uri.toString()}:${word}`;
+          const schemaDefinition = schemaDefinitions.get(schemaKey);
+          if (schemaDefinition) {
+            // Get the schema value
+            const schemaValue = getSchemaValue(document, word);
+            if (schemaValue) {
+              return new vscode.Hover(
+                new vscode.MarkdownString(
+                  `**Schema: ${schemaDefinition.name}**\n\nSchema details:\n\`\`\`json\n${schemaValue}\n\`\`\`\n\nPress F12 to go to definition.`
+                )
+              );
+            }
+          }
+
+          // Check if it's an attribute name (like "bsi::name")
+          const attributeKey = `${document.uri.toString()}:attribute:${word}`;
+          const attributeDefinition = schemaDefinitions.get(attributeKey);
+          if (attributeDefinition) {
+            // Find the schema definition for this attribute
+            const schemaDefinitionForAttribute = findSchemaDefinitionForAttribute(document, word);
+            if (schemaDefinitionForAttribute) {
+              // Get the schema value
+              const schemaValue = getSchemaValue(document, schemaDefinitionForAttribute.name);
+              if (schemaValue) {
+                return new vscode.Hover(
+                  new vscode.MarkdownString(
+                    `**Attribute: ${word}**\n\nSchema Definition:\n\`\`\`json\n${schemaValue}\n\`\`\`\n\nPress F12 to go to definition.`
+                  )
+                );
+              }
+            }
+          }
+
+          // Try to find a schema definition for this attribute
+          const schemaDefinitionForAttribute = findSchemaDefinitionForAttribute(document, word);
+          if (schemaDefinitionForAttribute) {
+            // Get the schema value
+            const schemaValue = getSchemaValue(document, schemaDefinitionForAttribute.name);
+            if (schemaValue) {
+              return new vscode.Hover(
+                new vscode.MarkdownString(
+                  `**Schema: ${schemaDefinitionForAttribute.name}**\n\nSchema details:\n\`\`\`json\n${schemaValue}\n\`\`\`\n\nPress F12 to go to definition.`
+                )
+              );
+            }
+          }
+        }
+
+        return null;
+      },
+    }
+  );
+
   // Register document change listener to update schema definitions
   const documentChangeListener = vscode.workspace.onDidChangeTextDocument((event) => {
     updateSchemaDefinitions(event.document);
@@ -72,7 +155,12 @@ export function activateDefinitionProvider(context: vscode.ExtensionContext) {
   }
 
   // Add disposables to context
-  context.subscriptions.push(definitionProvider, documentChangeListener, activeEditorListener);
+  context.subscriptions.push(
+    definitionProvider,
+    hoverProvider,
+    documentChangeListener,
+    activeEditorListener
+  );
 }
 
 function findSchemaDefinitionForAttribute(
@@ -96,6 +184,45 @@ function findSchemaDefinitionForAttribute(
     if (schemaDefinitionLastPart) {
       return schemaDefinitionLastPart;
     }
+  }
+
+  return null;
+}
+
+function isPositionInSchemasSection(
+  document: vscode.TextDocument,
+  position: vscode.Position
+): boolean {
+  const text = document.getText();
+  const positionOffset = document.offsetAt(position);
+
+  // Find the schemas section
+  const schemasMatch = text.match(/"schemas"\s*:\s*{/);
+  if (!schemasMatch) return false;
+
+  const schemasStart = schemasMatch.index! + schemasMatch[0].length;
+  const schemasEnd = findClosingBrace(text, schemasStart);
+  if (schemasEnd === -1) return false;
+
+  // Check if the position is within the schemas section
+  return positionOffset >= schemasStart && positionOffset <= schemasEnd;
+}
+
+function getSchemaValue(document: vscode.TextDocument, schemaName: string): string | null {
+  const text = document.getText();
+
+  try {
+    // Parse the entire document as JSON
+    const json = JSON.parse(text);
+
+    // Get the schemas section
+    if (json.schemas && json.schemas[schemaName]) {
+      // Return the formatted schema value
+      return JSON.stringify(json.schemas[schemaName], null, 2);
+    }
+  } catch (e) {
+    // If JSON parsing fails, return null
+    return null;
   }
 
   return null;
