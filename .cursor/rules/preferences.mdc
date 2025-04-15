@@ -4,7 +4,7 @@ globs:
 alwaysApply: true
 ---
 ## Preferences
-- Use kebab-case for file names.
+- Always use kebab-case for file names.
 - Using pnpm over npm.
 - Using eslint for lint and format.
 
