@@ -120,7 +120,9 @@ class SchemaHoverProvider implements vscode.HoverProvider {
         const commandUri = vscode.Uri.parse(`command:workbench.action.navigateBack`);
 
         // Add a clickable link to go to definition
-        content.appendMarkdown(`\n\n[Go to definition](${commandUri})`);
+        content.appendMarkdown(
+          `\n\n[Go to definition](${commandUri}) — or hold Ctrl and click the attribute name.`
+        );
 
         // Register a one-time command handler for this hover
         const disposable = vscode.commands.registerCommand('workbench.action.navigateBack', () => {
