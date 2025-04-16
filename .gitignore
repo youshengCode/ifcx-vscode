@@ -32,4 +32,7 @@ coverage/
 # Environment variables
 .env
 .env.local
-.env.*.local 
+.env.*.local
+
+# Cursor
+.cursor/rules/ 
