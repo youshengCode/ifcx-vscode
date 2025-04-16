@@ -1,0 +1,3 @@
+[submodule "reference/ifc5-development"]
+	path = reference/ifc5-development
+	url = https://github.com/youshengCode/IFC5-development.git
