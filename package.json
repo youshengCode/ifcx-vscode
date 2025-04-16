@@ -42,15 +42,19 @@
     "check": "pnpm run format:check && pnpm run lint",
     "build": "pnpm run check && pnpm run compile",
     "dev": "pnpm run watch",
-    "parse-ifcx": "ts-node src/scripts/ifcx-parser-example.ts"
+    "test": "jest"
   },
   "devDependencies": {
+    "@jest/types": "^29.6.3",
+    "@types/jest": "^29.5.14",
     "@types/node": "^20.11.0",
     "@types/vscode": "^1.85.0",
     "@typescript-eslint/eslint-plugin": "^6.15.0",
     "@typescript-eslint/parser": "^6.15.0",
     "eslint": "^8.56.0",
+    "jest": "^29.7.0",
     "prettier": "^3.2.0",
+    "ts-jest": "^29.3.2",
     "ts-node": "^10.9.2",
     "typescript": "^5.3.3"
   }

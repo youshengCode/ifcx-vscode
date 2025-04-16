@@ -6,7 +6,7 @@ export function activate(context: vscode.ExtensionContext) {
   console.log('🚀 IFCX Syntax Support is now active!');
 
   // Activate decorations
-  activateDecorations(context);
+  // activateDecorations(context);
   activateDefinitionProvider(context);
 }
 

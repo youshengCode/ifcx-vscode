@@ -35,4 +35,7 @@ coverage/
 .env.*.local
 
 # Cursor
-.cursor/rules/ 
+.cursor/rules/
+
+# Generated files
+generated/ 

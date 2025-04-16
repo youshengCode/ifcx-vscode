@@ -44,17 +44,18 @@ export function formatSchemaTooltip(schemaName: string, valueDesc: IfcxValueDesc
   if (valueDesc.dataType === 'Object' && valueDesc.objectRestrictions?.values) {
     const objectProps = formatObjectProperties(valueDesc.objectRestrictions.values);
     if (objectProps.length > 0) {
-      parts.push(...objectProps);
+      parts.push('**Properties:**');
+      parts.push(objectProps.join('\n'));
     }
   }
 
   // Handle array properties
   if (valueDesc.dataType === 'Array' && valueDesc.arrayRestrictions) {
     const arrayType = formatArrayType(valueDesc);
-    parts.push(arrayType);
+    parts.push(`**Array Type:** ${arrayType}`);
   }
 
-  return parts.join('\n');
+  return parts.join('\n\n');
 }
 
 /**

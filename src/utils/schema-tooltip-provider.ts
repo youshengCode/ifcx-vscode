@@ -22,6 +22,7 @@ export class SchemaTooltipProvider {
       this.schemas = ifcxFile.schemas;
     } catch (error) {
       console.error(`Failed to load schemas from file: ${error}`);
+      this.schemas = {};
     }
   }
 
@@ -36,6 +37,7 @@ export class SchemaTooltipProvider {
       this.schemas = ifcxFile.schemas;
     } catch (error) {
       console.error(`Failed to load schemas from content: ${error}`);
+      this.schemas = {};
     }
   }
 

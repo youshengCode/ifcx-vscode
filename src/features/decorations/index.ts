@@ -1,7 +1,51 @@
 import * as vscode from 'vscode';
-import { createDecorationType } from './styles';
-import { formatHoverMessage, findClosingBrace, getSchemaValue } from './utils';
+import { components } from '../../../reference/ifc5-development/schema/out/ts/ifcx';
+import { parseIfcxContent } from '../../utils/ifcx-parser';
+import { schemaTooltipProvider } from '../../utils/schema-tooltip-provider';
 
+// Type aliases for easier access to the generated types
+type IfcxFile = components['schemas']['IfcxFile'];
+
+/**
+ * Creates a decoration type for schema highlighting
+ */
+function createDecorationType(): vscode.TextEditorDecorationType {
+  return vscode.window.createTextEditorDecorationType({
+    backgroundColor: new vscode.ThemeColor('editor.symbolHighlightBackground'),
+    color: new vscode.ThemeColor('editor.foreground'),
+    light: {
+      backgroundColor: '#2aa19855', // Light teal with transparency
+    },
+    dark: {
+      backgroundColor: '#00b3b355', // Dark cyan with transparency
+    },
+    borderRadius: '3px',
+    before: {
+      contentText: '\u200B', // Zero-width space
+      margin: '0 2px 0 0',
+    },
+    after: {
+      contentText: '\u200B', // Zero-width space
+      margin: '0 0 0 2px',
+    },
+  });
+}
+
+/**
+ * Parses the IFCX content from a string
+ */
+function parseIfcxFileContent(content: string): IfcxFile | null {
+  try {
+    return parseIfcxContent(content);
+  } catch (error) {
+    console.error(`Failed to parse IFCX content: ${error}`);
+    return null;
+  }
+}
+
+/**
+ * Activates the schema decorations feature
+ */
 export function activateDecorations(context: vscode.ExtensionContext) {
   const decorationType = createDecorationType();
   let activeEditor = vscode.window.activeTextEditor;
@@ -14,50 +58,43 @@ export function activateDecorations(context: vscode.ExtensionContext) {
     const text = activeEditor.document.getText();
     const decorations: vscode.DecorationOptions[] = [];
 
-    // Find the schemas section
-    const schemasMatch = text.match(/"schemas"\s*:\s*{/);
-    if (schemasMatch) {
-      const schemasStart = schemasMatch.index! + schemasMatch[0].length;
-      const schemasEnd = findClosingBrace(text, schemasStart);
-      if (schemasEnd === -1) return; // Invalid JSON
+    // Parse the IFCX content and load schemas
+    const ifcxFile = parseIfcxFileContent(text);
+    if (ifcxFile) {
+      // Load schemas into the tooltip provider
+      schemaTooltipProvider.loadFromContent(text);
 
-      // Match only the first level schema names within schemas object
-      const schemaNameRegex = /\s+"([^"]+)"\s*:/g;
-      schemaNameRegex.lastIndex = schemasStart;
-      let match;
+      // Get all schema names
+      const schemaNames = Object.keys(ifcxFile.schemas);
 
-      while ((match = schemaNameRegex.exec(text))) {
-        // Stop if we've gone past the schemas object
-        if (match.index >= schemasEnd) break;
+      // Find schema names in the document
+      for (const schemaName of schemaNames) {
+        // Create a regex to find the schema name in the document
+        const schemaRegex = new RegExp(`"${schemaName}"\\s*:`, 'g');
+        let match;
 
-        // Only process if we're at the first level
-        const beforeMatch = text.substring(schemasStart, match.index);
-        const openBraces = (beforeMatch.match(/{/g) || []).length;
-        const closeBraces = (beforeMatch.match(/}/g) || []).length;
-
-        if (openBraces === closeBraces) {
-          // We're at the first level
+        while ((match = schemaRegex.exec(text))) {
           // Calculate position for content only (without quotes)
           const startPos = activeEditor.document.positionAt(
-            match.index + match[0].indexOf(match[1])
+            match.index + 1 // +1 to skip the opening quote
           );
-          const endPos = activeEditor.document.positionAt(
-            match.index + match[0].indexOf(match[1]) + match[1].length
-          );
+          const endPos = activeEditor.document.positionAt(match.index + 1 + schemaName.length);
           const range = new vscode.Range(startPos, endPos);
 
-          // Get schema value for hover message
-          const schemaValue = getSchemaValue(text, match.index);
+          // Get tooltip for the schema
+          const tooltipText = schemaTooltipProvider.getTooltip(schemaName);
 
-          // Create markdown string for hover message
-          const markdown = new vscode.MarkdownString(formatHoverMessage(match[1], schemaValue));
-          markdown.isTrusted = true;
-          markdown.supportHtml = true;
+          if (tooltipText) {
+            // Create markdown string for hover message
+            const markdown = new vscode.MarkdownString(tooltipText);
+            markdown.isTrusted = true;
+            markdown.supportHtml = true;
 
-          decorations.push({
-            range,
-            hoverMessage: markdown,
-          });
+            decorations.push({
+              range,
+              hoverMessage: markdown,
+            });
+          }
         }
       }
     }
