@@ -89,14 +89,14 @@ describe('Schema Tooltip Provider', () => {
     // Create markdown content
     let markdownContent = `# IFCX Schemas from hello-wall.ifcx\n\n`;
     markdownContent += `This file was automatically generated from the hello-wall.ifcx sample file.\n\n`;
-    markdownContent += `## Schemas\n\n`;
+    markdownContent += `## Schemas(${schemaNames.length})\n\n`;
 
     // Add each schema to the markdown
     for (const schemaName of schemaNames) {
       const tooltip = schemaTooltipProvider.getTooltip(schemaName);
       if (tooltip) {
-        markdownContent += `### ${schemaName}\n\n`;
         markdownContent += `${tooltip}\n\n`;
+        markdownContent += `---\n\n`;
       }
     }
 

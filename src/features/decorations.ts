@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
-import { components } from '../../../reference/ifc5-development/schema/out/ts/ifcx';
-import { parseIfcxContent } from '../../utils/ifcx-parser';
-import { schemaTooltipProvider } from '../../utils/schema-tooltip-provider';
+import { components } from '../../reference/ifc5-development/schema/out/ts/ifcx';
+import { parseIfcxContent } from '../utils/ifcx-parser';
+import { schemaTooltipProvider } from '../utils/schema-tooltip-provider';
 
 // Type aliases for easier access to the generated types
 type IfcxFile = components['schemas']['IfcxFile'];

@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
-import { parseIfcxContent } from '../../utils/ifcx-parser';
-import { schemaTooltipProvider } from '../../utils/schema-tooltip-provider';
+import { parseIfcxContent } from '../utils/ifcx-parser';
+import { schemaTooltipProvider } from '../utils/schema-tooltip-provider';
 
 // Interface for schema definitions
 interface SchemaDefinition {
