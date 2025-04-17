@@ -11,23 +11,14 @@ type IfcxFile = components['schemas']['IfcxFile'];
  */
 function createDecorationType(): vscode.TextEditorDecorationType {
   return vscode.window.createTextEditorDecorationType({
-    backgroundColor: new vscode.ThemeColor('editor.symbolHighlightBackground'),
-    color: new vscode.ThemeColor('editor.foreground'),
+    textDecoration: 'underline',
     light: {
-      backgroundColor: '#2aa19855', // Light teal with transparency
+      textDecoration: 'underline #2aa198',
     },
     dark: {
-      backgroundColor: '#00b3b355', // Dark cyan with transparency
+      textDecoration: 'underline #00b3b3',
     },
-    borderRadius: '3px',
-    before: {
-      contentText: '\u200B', // Zero-width space
-      margin: '0 2px 0 0',
-    },
-    after: {
-      contentText: '\u200B', // Zero-width space
-      margin: '0 0 0 2px',
-    },
+    fontStyle: 'italic',
   });
 }
 
@@ -81,20 +72,8 @@ export function activateDecorations(context: vscode.ExtensionContext) {
           const endPos = activeEditor.document.positionAt(match.index + 1 + schemaName.length);
           const range = new vscode.Range(startPos, endPos);
 
-          // Get tooltip for the schema
-          const tooltipText = schemaTooltipProvider.getTooltip(schemaName);
-
-          if (tooltipText) {
-            // Create markdown string for hover message
-            const markdown = new vscode.MarkdownString(tooltipText);
-            markdown.isTrusted = true;
-            markdown.supportHtml = true;
-
-            decorations.push({
-              range,
-              hoverMessage: markdown,
-            });
-          }
+          // Add decoration without tooltip
+          decorations.push({ range });
         }
       }
     }
