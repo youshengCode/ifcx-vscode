@@ -3,6 +3,7 @@ import { activateDecorations } from './features/decorations';
 import { activateDefinitionProvider } from './features/definition';
 import { registerAutoCollapseSchemas } from './features/auto-collapse-schemas';
 import { registerAutoFoldArrays } from './features/auto-fold-arrays';
+import { activateIdentifierTooltips } from './features/identifier-tooltips';
 
 export function activate(context: vscode.ExtensionContext) {
   console.log('🚀 IFCX Syntax Support is now active!');
@@ -11,6 +12,7 @@ export function activate(context: vscode.ExtensionContext) {
   activateDefinitionProvider(context);
   registerAutoCollapseSchemas(context);
   registerAutoFoldArrays(context);
+  activateIdentifierTooltips(context);
 }
 
 export function deactivate() {}
