@@ -2,7 +2,7 @@
   "name": "ifcx-vscode",
   "displayName": "IFCX Syntax",
   "description": "Syntax highlighting and language support for IFCX files",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "preRelease": true,
   "publisher": "yousheng",
   "icon": "images/logo.png",
@@ -11,11 +11,11 @@
   },
   "author": {
     "name": "Yousheng",
-    "url": "https://github.com/yousheng"
+    "url": "https://github.com/youshengCode"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/yousheng/ifcx-vscode.git"
+    "url": "https://github.com/youshengCode/ifcx-vscode.git"
   },
   "license": "MIT",
   "categories": [

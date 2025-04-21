@@ -38,10 +38,6 @@ Customize the extension behavior in VS Code settings:
 ```bash
 # Install dependencies
 pnpm install
-
-# Build the extension
-pnpm build
-
 # Start development mode
 pnpm dev
 ```
