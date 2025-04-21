@@ -149,7 +149,7 @@ class SchemaHoverProvider implements vscode.HoverProvider {
 /**
  * Activates the definition provider feature
  */
-export function activateDefinitionProvider(context: vscode.ExtensionContext) {
+export function activateSchemaDefinition(context: vscode.ExtensionContext) {
   // Register definition provider
   const definitionProvider = new SchemaDefinitionProvider();
   context.subscriptions.push(

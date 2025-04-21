@@ -55,7 +55,7 @@ class IfcxFoldingProvider implements vscode.FoldingRangeProvider {
 /**
  * Registers the auto-collapse functionality for .ifcx files
  */
-export function registerAutoCollapseSchemas(context: vscode.ExtensionContext) {
+export function registerAutoFoldSchemas(context: vscode.ExtensionContext) {
   // Register the folding provider for .ifcx files
   const foldingProvider = new IfcxFoldingProvider();
 

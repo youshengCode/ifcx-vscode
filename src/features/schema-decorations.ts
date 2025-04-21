@@ -37,7 +37,7 @@ function parseIfcxFileContent(content: string): IfcxFile | null {
 /**
  * Activates the schema decorations feature
  */
-export function activateDecorations(context: vscode.ExtensionContext) {
+export function activateSchemaDecorations(context: vscode.ExtensionContext) {
   const decorationType = createDecorationType();
   let activeEditor = vscode.window.activeTextEditor;
 

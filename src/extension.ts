@@ -1,18 +1,22 @@
 import * as vscode from 'vscode';
-import { activateDecorations } from './features/decorations';
-import { activateDefinitionProvider } from './features/definition';
-import { registerAutoCollapseSchemas } from './features/auto-collapse-schemas';
+import { activateSchemaDecorations } from './features/schema-decorations';
+import { activateSchemaDefinition } from './features/schema-definition';
+import { registerAutoFoldSchemas } from './features/auto-fold-schemas';
 import { registerAutoFoldArrays } from './features/auto-fold-arrays';
-import { activateIdentifierTooltips } from './features/identifier-tooltips';
+import { activateIdentifierDecorations } from './features/identifier-decorations';
+import { activateIdentifierDefinitions } from './features/identifier-definitions';
 
 export function activate(context: vscode.ExtensionContext) {
   console.log('🚀 IFCX Syntax Support is now active!');
 
-  activateDecorations(context);
-  activateDefinitionProvider(context);
-  registerAutoCollapseSchemas(context);
+  activateSchemaDecorations(context);
+  activateSchemaDefinition(context);
+
+  registerAutoFoldSchemas(context);
   registerAutoFoldArrays(context);
-  activateIdentifierTooltips(context);
+
+  activateIdentifierDecorations(context);
+  activateIdentifierDefinitions(context);
 }
 
 export function deactivate() {}
