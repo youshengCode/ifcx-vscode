@@ -1,12 +1,8 @@
 import * as vscode from 'vscode';
 
-// Configuration constant for the minimum number of elements to trigger folding
-// This can be moved to extension settings in the future
-const MIN_ARRAY_ELEMENTS_TO_FOLD = 10;
-
 /**
  * Auto-folds array properties in the attributes section of data elements
- * that have more than MIN_ARRAY_ELEMENTS_TO_FOLD elements
+ * that have more than the configured minimum number of elements
  */
 export function registerAutoFoldArrays(context: vscode.ExtensionContext) {
   // Register a document open handler to auto-fold array properties
@@ -49,20 +45,28 @@ export function registerAutoFoldArrays(context: vscode.ExtensionContext) {
 }
 
 /**
- * Folds array properties in the current editor that have more than MIN_ARRAY_ELEMENTS_TO_FOLD elements
+ * Folds array properties in the current editor that have more than the configured minimum number of elements
  */
 function foldLargeArrays(editor: vscode.TextEditor) {
   const document = editor.document;
   const text = document.getText();
 
-  // Find all array properties in the document
-  findAndFoldArrays(text, document, editor);
+  // Get the minimum array elements configuration
+  const config = vscode.workspace.getConfiguration('ifcx.autoFoldArray');
+  const minElements = config.get('minElements', 10);
+
+  findAndFoldArrays(text, document, editor, minElements);
 }
 
 /**
  * Recursively finds and folds arrays in the document
  */
-function findAndFoldArrays(text: string, document: vscode.TextDocument, editor: vscode.TextEditor) {
+function findAndFoldArrays(
+  text: string,
+  document: vscode.TextDocument,
+  editor: vscode.TextEditor,
+  minElements: number
+) {
   // Find all array properties
   const arrayPropertyRegex = /"([^"]+)":\s*\[/g;
   let match;
@@ -93,7 +97,7 @@ function findAndFoldArrays(text: string, document: vscode.TextDocument, editor: 
       const elementCount = countArrayElements(arrayContent);
 
       // Only fold if the array has more than the minimum number of elements
-      if (elementCount > MIN_ARRAY_ELEMENTS_TO_FOLD) {
+      if (elementCount >= minElements) {
         const startPosition = document.positionAt(arrayStart);
         const endPosition = document.positionAt(arrayEnd);
 
@@ -104,7 +108,7 @@ function findAndFoldArrays(text: string, document: vscode.TextDocument, editor: 
 
       // Recursively look for nested arrays within this array
       const nestedText = text.substring(arrayStart, arrayEnd - 1);
-      findAndFoldArrays(nestedText, document, editor);
+      findAndFoldArrays(nestedText, document, editor, minElements);
     }
   }
 }
@@ -179,8 +183,11 @@ class IfcxArrayFoldingProvider implements vscode.FoldingRangeProvider {
     const foldingRanges: vscode.FoldingRange[] = [];
     const text = document.getText();
 
-    // Find all array properties in the document
-    this.findArrayFoldingRanges(text, document, foldingRanges);
+    // Get the minimum array elements configuration
+    const config = vscode.workspace.getConfiguration('ifcx.autoFoldArray');
+    const minElements = config.get('minElements', 10);
+
+    this.findArrayFoldingRanges(text, document, foldingRanges, minElements);
 
     return foldingRanges;
   }
@@ -191,7 +198,8 @@ class IfcxArrayFoldingProvider implements vscode.FoldingRangeProvider {
   private findArrayFoldingRanges(
     text: string,
     document: vscode.TextDocument,
-    foldingRanges: vscode.FoldingRange[]
+    foldingRanges: vscode.FoldingRange[],
+    minElements: number
   ): void {
     // Find all array properties
     const arrayPropertyRegex = /"([^"]+)":\s*\[/g;
@@ -223,7 +231,7 @@ class IfcxArrayFoldingProvider implements vscode.FoldingRangeProvider {
         const elementCount = countArrayElements(arrayContent);
 
         // Only add folding range if the array has more than the minimum number of elements
-        if (elementCount > MIN_ARRAY_ELEMENTS_TO_FOLD) {
+        if (elementCount >= minElements) {
           const startPosition = document.positionAt(arrayStart);
           const endPosition = document.positionAt(arrayEnd);
 
@@ -238,7 +246,7 @@ class IfcxArrayFoldingProvider implements vscode.FoldingRangeProvider {
 
         // Recursively look for nested arrays within this array
         const nestedText = text.substring(arrayStart, arrayEnd - 1);
-        this.findArrayFoldingRanges(nestedText, document, foldingRanges);
+        this.findArrayFoldingRanges(nestedText, document, foldingRanges, minElements);
       }
     }
   }

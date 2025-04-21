@@ -1,11 +1,23 @@
 {
   "name": "ifcx-vscode",
-  "displayName": "IFCX Syntax Support",
+  "displayName": "IFCX Syntax",
   "description": "Syntax highlighting and language support for IFCX files",
-  "version": "0.0.1",
+  "version": "0.0.2",
+  "preRelease": true,
+  "publisher": "yousheng",
+  "icon": "images/logo.png",
   "engines": {
     "vscode": "^1.85.0"
   },
+  "author": {
+    "name": "Yousheng",
+    "url": "https://github.com/yousheng"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yousheng/ifcx-vscode.git"
+  },
+  "license": "MIT",
   "categories": [
     "Programming Languages"
   ],
@@ -29,7 +41,47 @@
         "scopeName": "source.ifcx",
         "path": "./syntaxes/ifcx.tmLanguage.json"
       }
-    ]
+    ],
+    "configuration": {
+      "title": "IFCX Syntax",
+      "properties": {
+        "ifcx.schemaDefinition.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable schema definition navigation"
+        },
+        "ifcx.schemaDecoration.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable schema decorations"
+        },
+        "ifcx.identifierDecoration.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable identifier decorations"
+        },
+        "ifcx.identifierDefinition.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable identifier definition navigation"
+        },
+        "ifcx.autoFoldArray.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable auto-folding of arrays"
+        },
+        "ifcx.autoFoldArray.minElements": {
+          "type": "number",
+          "default": 10,
+          "description": "Minimum number of array elements to trigger auto-folding"
+        },
+        "ifcx.autoFoldSchema.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable auto-folding of schemas"
+        }
+      }
+    }
   },
   "main": "./out/extension.js",
   "scripts": {
@@ -42,7 +94,10 @@
     "check": "pnpm run format:check && pnpm run lint",
     "build": "pnpm run check && pnpm run compile",
     "dev": "pnpm run watch",
-    "test": "jest"
+    "test": "jest",
+    "package": "pnpm run build && vsce package",
+    "publish-preview": "pnpm run build && vsce package --pre-release",
+    "publish": "pnpm run build && vsce publish --pre-release"
   },
   "devDependencies": {
     "@jest/types": "^29.6.3",
@@ -51,6 +106,7 @@
     "@types/vscode": "^1.85.0",
     "@typescript-eslint/eslint-plugin": "^6.15.0",
     "@typescript-eslint/parser": "^6.15.0",
+    "@vscode/vsce": "^2.24.0",
     "eslint": "^8.56.0",
     "jest": "^29.7.0",
     "prettier": "^3.2.0",

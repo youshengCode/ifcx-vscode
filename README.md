@@ -1,35 +1,51 @@
-# IFCX Syntax Support for VS Code
+# IFCX Syntax
 
-This extension provides syntax highlighting and language support for IFCX files in Visual Studio Code.
+A Visual Studio Code extension that provides syntax highlighting and language support for IFCX files.
 
 ## Features
 
-- Syntax highlighting for IFCX files
-- Special highlighting for IFCX-specific patterns (e.g., `bsi::name`, `bsi::ifc5::alpha::class`)
-- JSON-based syntax with additional IFCX-specific features
-- Auto-completion and bracket matching
+- ✨ Syntax highlighting for IFCX files
+- 🔍 Schema definition navigation and decorations
+- 🏷️ Identifier decorations and definition navigation
+- 📦 Auto-folding for arrays and schemas
+- 🎯 JSON-based syntax with IFCX-specific enhancements
 
-## Installation
+## Development Status
 
-1. Clone this repository
-2. Run `pnpm install` to install dependencies
-3. Press F5 in VS Code to start debugging
+⚠️ **This extension is under active development** and is aligned with the [IFC5 development](https://github.com/youshengCode/IFC5-development). As IFC5 evolves, this extension will be updated to support new features and improvements. Please note that:
 
-## Usage
+- The extension is currently in beta phase
+- Features may change as IFC5 specifications are finalized
+- Breaking changes may occur during development
+- Feedback and contributions are welcome
 
-The extension automatically recognizes files with the `.ifcx` extension. It provides:
+## Configuration
 
-- Syntax highlighting for IFCX-specific patterns
-- JSON syntax support as a base
-- Special highlighting for schema definitions
-- Bracket matching and auto-closing pairs
+Customize the extension behavior in VS Code settings:
+
+| Setting                             | Description                   | Default |
+| ----------------------------------- | ----------------------------- | ------- |
+| `ifcx.schemaDefinition.enabled`     | Enable schema navigation      | `true`  |
+| `ifcx.schemaDecoration.enabled`     | Enable schema decorations     | `true`  |
+| `ifcx.identifierDecoration.enabled` | Enable identifier decorations | `true`  |
+| `ifcx.identifierDefinition.enabled` | Enable identifier navigation  | `true`  |
+| `ifcx.autoFoldArray.enabled`        | Enable array auto-folding     | `true`  |
+| `ifcx.autoFoldArray.minElements`    | Min elements for auto-folding | `10`    |
+| `ifcx.autoFoldSchema.enabled`       | Enable schema auto-folding    | `true`  |
 
 ## Development
 
-- Built with TypeScript
-- Uses ESLint for code quality
-- Follows VS Code extension development best practices
+```bash
+# Install dependencies
+pnpm install
+
+# Build the extension
+pnpm build
+
+# Start development mode
+pnpm dev
+```
 
 ## License
 
-MIT
+MIT | Crafted with love, caffeine, and reckless faith in IFC5.
