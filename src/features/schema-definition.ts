@@ -136,7 +136,7 @@ class SchemaHoverProvider implements vscode.HoverProvider {
         });
 
         // Make sure to dispose the command handler when the hover is dismissed
-        setTimeout(() => disposable.dispose(), 10000);
+        setTimeout(() => disposable.dispose(), 1000);
 
         return new vscode.Hover(content, wordRange);
       }

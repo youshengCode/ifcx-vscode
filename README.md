@@ -2,6 +2,11 @@
 
 A Visual Studio Code extension that provides syntax highlighting and language support for IFCX files.
 
+## Screenshots
+
+![Schema Enhancement](images/feature-schema.jpg)
+![Identifier Enhancement](images/feature-identifier.jpg)
+
 ## Features
 
 - ✨ Syntax highlighting for IFCX files

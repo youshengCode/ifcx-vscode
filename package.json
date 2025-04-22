@@ -2,7 +2,7 @@
   "name": "ifcx-vscode",
   "displayName": "IFCX Syntax",
   "description": "Syntax highlighting and language support for IFCX files",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "preRelease": true,
   "publisher": "yousheng",
   "icon": "images/logo.png",
@@ -96,7 +96,6 @@
     "dev": "pnpm run watch",
     "test": "jest",
     "package": "pnpm run build && vsce package",
-    "publish-preview": "pnpm run build && vsce package --pre-release",
     "publish": "pnpm run build && vsce publish --pre-release"
   },
   "devDependencies": {
